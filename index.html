@@ -1,3 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockCare - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{display:flex;background:#f1f5f9;}
+/* Sidebar */
+.sidebar{width:250px;height:100vh;background:linear-gradient(180deg,#0f172a,#1e293b);color:white;padding:25px;position:fixed;}
+.sidebar h2{margin-bottom:40px;}
+.sidebar ul{list-style:none;}
+.sidebar ul li{padding:15px 0;cursor:pointer;transition:0.3s;}
+.sidebar ul li:hover{color:#38bdf8;transform:translateX(5px);}
+/* Main */
+.main{margin-left:250px;padding:30px;width:100%;}
+/* Navbar */
+.navbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;}
+.navbar h1{font-weight:600;}
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;}
+.card{background:white;padding:25px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.05);transition:0.3s;}
+.card:hover{transform:translateY(-5px);}
+.card h3{font-size:16px;color:#64748b;margin-bottom:10px;}
+.card p{font-size:28px;font-weight:600;}
+/* Table */
+table{width:100%;margin-top:40px;border-collapse:collapse;background:white;border-radius:15px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.05);}
+table th, table td{padding:15px;text-align:left;}
+table th{background:#0ea5e9;color:white;}
+table tr:nth-child(even){background:#f8fafc;}
+.status-good{color:green;font-weight:600;}
+.status-warning{color:orange;font-weight:600;}
+.status-danger{color:red;font-weight:600;}
+/* Add Product Form */
+.add-product{margin-top:40px;background:white;padding:25px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.05);}
+.add-product input{padding:10px;margin:5px;width:180px;border:1px solid #cbd5e1;border-radius:8px;}
+.add-product button{padding:10px 20px;background:#0ea5e9;color:white;border:none;border-radius:8px;cursor:pointer;transition:0.3s;}
+.add-product button:hover{background:#0284c7;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>📦 StockCare</h2>
+    <ul>
+        <li>🏠 Dashboard</li>
+        <li>📦 Products</li>
+        <li>➕ Add Product</li>
+        <li>⏰ Expiry Alerts</li>
+        <li>📊 Reports</li>
+        <li>⚙ Settings</li>
+    </ul>
+</div>
+
+<div class="main">
+    <div class="navbar">
+        <h1>Dashboard Overview</h1>
+        <div>👤 Admin</div>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Products</h3>
+            <p>0</p>
+        </div>
+        <div class="card">
+            <h3>Expiring Soon</h3>
+            <p>0</p>
+        </div>
+        <div class="card">
+            <h3>Low Stock</h3>
+            <p>0</p>
+        </div>
+        <div class="card">
+            <h3>Out of Stock</h3>
+            <p>0</p>
+        </div>
+    </div>
+
+    <!-- Add Product Form -->
+    <div class="add-product">
+        <h2>Add New Product</h2>
+        <input type="text" id="name" placeholder="Product Name">
+        <input type="number" id="quantity" placeholder="Quantity">
+        <input type="date" id="expiry">
+        <button onclick="addProduct()">Add Product</button>
+    </div>
+
+    <!-- Product Table -->
+    <table></table>
+</div>
+
 <script>
 let products = JSON.parse(localStorage.getItem("products")) || [];
 
@@ -18,6 +112,11 @@ function addProduct(){
     products.push({name, quantity, expiry});
     saveProducts();
     renderDashboard();
+
+    // Clear inputs
+    document.getElementById("name").value = "";
+    document.getElementById("quantity").value = "";
+    document.getElementById("expiry").value = "";
 }
 
 function renderDashboard(){
@@ -39,7 +138,6 @@ function renderDashboard(){
     products.forEach(p=>{
         let expiryDate = new Date(p.expiry);
         let diffDays = (expiryDate - today)/(1000*60*60*24);
-
         let status = "Good";
         let className = "status-good";
 
@@ -47,8 +145,7 @@ function renderDashboard(){
             status = "Out of Stock";
             className = "status-danger";
             outStock++;
-        } 
-        else if(p.quantity <= 5){
+        } else if(p.quantity <= 5){
             lowStock++;
         }
 
@@ -76,3 +173,6 @@ function renderDashboard(){
 
 renderDashboard();
 </script>
+
+</body>
+</html>
