@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockCare - Mobile Friendly Dashboard</title>
+<title>StockCare - Mobile SaaS Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;transition:0.3s;}
-body{display:flex;background:#0f172a;color:white;transition:0.3s;}
+body{display:flex;background:#0f172a;color:white;transition:0.3s;overflow-x:hidden;}
 body.light{background:#f1f5f9;color:#111827;}
 body.light .sidebar{background:linear-gradient(180deg,#94a3b8,#cbd5e1);color:#111827;}
 body.light .card,body.light .add-product,body.light table,body.light .chart-container{background:rgba(255,255,255,0.8);color:#111827;backdrop-filter:none;}
@@ -21,16 +21,11 @@ body.light table th{background:rgba(14,165,233,0.7);color:white;}
 .sidebar ul li{padding:15px 0;cursor:pointer;transition:0.3s;}
 .sidebar ul li:hover{color:#38bdf8;transform:translateX(5px);}
 
-/* Hamburger menu for mobile */
-.hamburger{
-    display:none;
-    position:fixed;
-    top:20px;
-    left:20px;
-    font-size:30px;
-    cursor:pointer;
-    z-index:999;
-}
+/* Hamburger menu */
+.hamburger{display:none;position:fixed;top:20px;left:20px;font-size:30px;cursor:pointer;z-index:999;color:white;}
+
+/* Overlay for mobile */
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:998;transition:0.3s;}
 
 /* Main */
 .main{margin-left:250px;padding:30px;width:100%;transition:0.3s;}
@@ -50,13 +45,14 @@ body.light table th{background:rgba(14,165,233,0.7);color:white;}
 
 /* Add Product Form */
 .add-product{margin-top:40px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:25px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
-.add-product input{padding:10px;margin:5px;width:calc(100% - 20px);border:none;border-radius:8px;}
+.add-product input{padding:10px;margin:5px 0;width:100%;border:none;border-radius:8px;}
 .add-product button{padding:10px 20px;background:linear-gradient(90deg,#0ea5e9,#0284c7);color:white;border:none;border-radius:8px;cursor:pointer;transition:0.3s;width:100%;}
 .add-product button:hover{opacity:0.9;}
 
 /* Table */
-table{width:100%;margin-top:40px;border-collapse:collapse;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:15px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
-table th, table td{padding:15px;text-align:left;}
+.table-container{overflow-x:auto;margin-top:40px;}
+table{width:100%;border-collapse:collapse;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:15px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
+table th, table td{padding:15px;text-align:left;white-space:nowrap;}
 table th{background:rgba(14,165,233,0.7);color:white;}
 table tr:nth-child(even){background:rgba(255,255,255,0.05);}
 .status-good{color:#22c55e;font-weight:600;}
@@ -71,12 +67,14 @@ table tr:nth-child(even){background:rgba(255,255,255,0.05);}
     .sidebar{left:-260px;}
     .main{margin-left:0;padding:20px;}
     .hamburger{display:block;}
+    .overlay{display:none;}
 }
 </style>
 </head>
 <body>
 
 <div class="hamburger" onclick="toggleSidebar()">☰</div>
+<div class="overlay" onclick="closeSidebar()"></div>
 
 <div class="sidebar">
     <h2>📦 StockCare</h2>
@@ -114,7 +112,9 @@ table tr:nth-child(even){background:rgba(255,255,255,0.05);}
         <button onclick="addProduct()">Add Product</button>
     </div>
 
-    <table></table>
+    <div class="table-container">
+        <table></table>
+    </div>
 
     <div class="chart-container">
         <canvas id="stockChart" height="150"></canvas>
@@ -123,14 +123,17 @@ table tr:nth-child(even){background:rgba(255,255,255,0.05);}
 </div>
 
 <script>
-const API_URL = "https://your-render-url.onrender.com"; // Replace with your backend URL
+const API_URL = "https://your-render-url.onrender.com"; // Replace with your backend
 let products = [];
 
 function toggleTheme(){document.body.classList.toggle("light");}
-
 function toggleSidebar(){
-    const sidebar = document.querySelector(".sidebar");
-    sidebar.style.left = (sidebar.style.left === "0px") ? "-260px" : "0px";
+    document.querySelector(".sidebar").style.left="0px";
+    document.querySelector(".overlay").style.display="block";
+}
+function closeSidebar(){
+    document.querySelector(".sidebar").style.left="-260px";
+    document.querySelector(".overlay").style.display="none";
 }
 
 async function fetchProducts(){
