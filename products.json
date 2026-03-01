@@ -1,0 +1,4 @@
+StockCare/
+ ├─ index.html        ← frontend dashboard
+ ├─ server.js         ← backend server
+ └─ package.json      ← Node project file (auto-created)

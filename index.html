@@ -3,145 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockCare - Professional Dashboard</title>
+<title>StockCare Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;transition:0.3s;}
-body{display:flex;background:#0f172a;color:white;overflow-x:hidden;}
-body.light{background:#f1f5f9;color:#111827;}
-body.light .sidebar{background:linear-gradient(180deg,#94a3b8,#cbd5e1);color:#111827;}
-body.light .card,body.light .add-product,body.light table,body.light .chart-container{background:rgba(255,255,255,0.8);color:#111827;backdrop-filter:none;}
-body.light table th{background:rgba(14,165,233,0.7);color:white;}
-
-/* Sidebar */
-.sidebar{width:250px;height:100vh;background:linear-gradient(180deg,#111827,#1e293b);color:white;padding:25px;position:fixed;left:0;top:0;transition:0.3s;}
-.sidebar h2{margin-bottom:40px;}
-.sidebar ul{list-style:none;}
-.sidebar ul li{padding:15px 0;cursor:pointer;transition:0.3s;}
-.sidebar ul li:hover{color:#38bdf8;transform:translateX(5px);}
-
-/* Hamburger menu */
-.hamburger{display:none;position:fixed;top:20px;left:20px;font-size:30px;cursor:pointer;z-index:999;color:white;}
-.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:998;transition:0.3s;}
-
-/* Main */
-.main{margin-left:250px;padding:30px;width:100%;transition:0.3s;}
-
-/* Navbar */
-.navbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;}
-.navbar h1{font-weight:600;}
-.toggle-btn{padding:8px 15px;border:none;border-radius:8px;background:linear-gradient(90deg,#0ea5e9,#0284c7);cursor:pointer;color:white;transition:0.3s;}
-.toggle-btn:hover{opacity:0.9;}
-.notifications{position:relative;cursor:pointer;margin-right:20px;font-size:24px;}
-#notif-count{background:red;color:white;border-radius:50%;padding:2px 6px;font-size:12px;position:absolute;top:-10px;right:-10px;}
-
-/* Cards */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;}
-.card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:25px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,0.3);transition:0.3s linear;}
-.card:hover{transform:translateY(-5px);background:linear-gradient(135deg,#0ea5e9,#3b82f6);}
-.card h3{font-size:16px;color:#94a3b8;margin-bottom:10px;}
-.card p{font-size:28px;font-weight:600;}
-
-/* Add Product Form */
-.add-product{margin-top:40px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:25px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
-.add-product input{padding:10px;margin:5px 0;width:100%;border:none;border-radius:8px;}
-.add-product button{padding:10px 20px;background:linear-gradient(90deg,#0ea5e9,#0284c7);color:white;border:none;border-radius:8px;cursor:pointer;transition:0.3s;width:100%;}
-.add-product button:hover{opacity:0.9;}
-
-/* Table */
-.table-container{overflow-x:auto;margin-top:40px;}
-table{width:100%;border-collapse:collapse;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:15px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
-table th, table td{padding:15px;text-align:left;white-space:nowrap;}
-table th{background:rgba(14,165,233,0.7);color:white;}
-table tr:nth-child(even){background:rgba(255,255,255,0.05);}
-.status-good{color:#22c55e;font-weight:600;}
-.status-warning{color:#facc15;font-weight:600;}
-.status-danger{color:#ef4444;font-weight:600;}
-
-/* Chart container */
-.chart-container{margin-top:40px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:25px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
-
-/* Toast */
-#toast-container .toast{background:rgba(14,165,233,0.9);color:white;padding:12px 20px;margin-top:10px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);animation:slideIn 0.5s forwards;}
-@keyframes slideIn{from{opacity:0;transform:translateX(100%);}to{opacity:1;transform:translateX(0);}}
-
-/* Responsive */
-@media screen and (max-width:768px){
-    .sidebar{left:-260px;}
-    .main{margin-left:0;padding:20px;}
-    .hamburger{display:block;}
-    .overlay{display:none;}
-}
+/* --- Simple professional CSS --- */
+body{font-family:'Poppins',sans-serif;margin:0;padding:0;background:#f0f4f8;color:#111;}
+header{padding:20px;background:#0ea5e9;color:white;text-align:center;font-size:24px;font-weight:600;}
+.container{padding:20px;}
+.card-container{display:flex;gap:15px;flex-wrap:wrap;margin-bottom:20px;}
+.card{flex:1;min-width:150px;background:white;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);text-align:center;}
+.card h3{margin:0;color:#0ea5e9;}
+.card p{font-size:24px;margin:5px 0;font-weight:600;}
+form{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+form input, form button{padding:10px;border-radius:5px;border:1px solid #ccc;}
+form button{background:#0ea5e9;color:white;border:none;cursor:pointer;}
+table{width:100%;border-collapse:collapse;background:white;border-radius:10px;overflow:hidden;}
+table th, table td{padding:12px;text-align:left;border-bottom:1px solid #eee;}
+.status-good{color:green;font-weight:600;}
+.status-warning{color:orange;font-weight:600;}
+.status-danger{color:red;font-weight:600;}
+.toast-container{position:fixed;top:20px;right:20px;z-index:9999;}
+.toast{background:#f87171;color:white;padding:10px;margin-bottom:10px;border-radius:5px;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
 </style>
 </head>
 <body>
 
-<div class="hamburger" onclick="toggleSidebar()">☰</div>
-<div class="overlay" onclick="closeSidebar()"></div>
+<header>StockCare - Smart Inventory Dashboard</header>
+<div class="container">
+    <div class="card-container">
+        <div class="card"><h3>Total Products</h3><p id="total-products">0</p></div>
+        <div class="card"><h3>Expiring Soon</h3><p id="expiring-soon">0</p></div>
+        <div class="card"><h3>Low Stock</h3><p id="low-stock">0</p></div>
+        <div class="card"><h3>Out of Stock</h3><p id="out-stock">0</p></div>
+    </div>
 
-<div class="sidebar">
-    <h2>📦 StockCare</h2>
-    <ul>
-        <li>🏠 Dashboard</li>
-        <li>📦 Products</li>
-        <li>➕ Add Product</li>
-        <li>⏰ Expiry Alerts</li>
-        <li>📊 Reports</li>
-        <li>⚙ Settings</li>
-    </ul>
+    <form onsubmit="event.preventDefault(); addProduct();">
+        <input type="text" id="name" placeholder="Product Name" required>
+        <input type="number" id="quantity" placeholder="Quantity" required>
+        <input type="date" id="expiry" required>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <table>
+        <tr><th>Product</th><th>Quantity</th><th>Expiry Date</th><th>Status</th></tr>
+    </table>
+
+    <canvas id="stockChart" style="margin-top:30px;"></canvas>
+    <canvas id="statusChart" style="margin-top:30px;"></canvas>
 </div>
 
-<div class="main">
-    <div class="navbar">
-        <h1>Premium Dashboard</h1>
-        <div style="display:flex;align-items:center;">
-            <div class="notifications">🔔 <span id="notif-count">0</span></div>
-            👤 Admin
-            <button class="toggle-btn" onclick="toggleTheme()">Toggle Dark/Light</button>
-        </div>
-    </div>
-
-    <div class="cards">
-        <div class="card"><h3>Total Products</h3><p>0</p></div>
-        <div class="card"><h3>Expiring Soon</h3><p>0</p></div>
-        <div class="card"><h3>Low Stock</h3><p>0</p></div>
-        <div class="card"><h3>Out of Stock</h3><p>0</p></div>
-    </div>
-
-    <div class="add-product">
-        <h2>Add New Product</h2>
-        <input type="text" id="name" placeholder="Product Name">
-        <input type="number" id="quantity" placeholder="Quantity">
-        <input type="date" id="expiry">
-        <button onclick="addProduct()">Add Product</button>
-    </div>
-
-    <div class="table-container">
-        <table></table>
-    </div>
-
-    <div class="chart-container">
-        <canvas id="stockChart" height="150"></canvas>
-        <canvas id="statusChart" height="150" style="margin-top:30px;"></canvas>
-    </div>
-</div>
-
-<div id="toast-container"></div>
+<div id="toast-container" class="toast-container"></div>
 
 <script>
-const API_URL = "https://your-render-url.onrender.com"; // replace with your backend
+const API_URL = "http://localhost:5000"; // backend URL
 let products=[], stockChart, statusChart;
-
-function toggleTheme(){document.body.classList.toggle("light");}
-function toggleSidebar(){
-    document.querySelector(".sidebar").style.left="0px";
-    document.querySelector(".overlay").style.display="block";
-}
-function closeSidebar(){
-    document.querySelector(".sidebar").style.left="-260px";
-    document.querySelector(".overlay").style.display="none";
-}
 
 async function fetchProducts(){
     const res = await fetch(`${API_URL}/products`);
@@ -150,10 +66,10 @@ async function fetchProducts(){
 }
 
 async function addProduct(){
-    let name=document.getElementById("name").value;
-    let quantity=parseInt(document.getElementById("quantity").value);
-    let expiry=document.getElementById("expiry").value;
-    if(!name||!quantity||!expiry){alert("Fill all fields");return;}
+    const name=document.getElementById("name").value;
+    const quantity=parseInt(document.getElementById("quantity").value);
+    const expiry=document.getElementById("expiry").value;
+    if(!name||!quantity||!expiry){alert("Fill all fields"); return;}
     await fetch(`${API_URL}/products`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
@@ -163,15 +79,9 @@ async function addProduct(){
     document.getElementById("quantity").value="";
     document.getElementById("expiry").value="";
     fetchProducts();
+    showToast(`Product "${name}" added!`);
 }
 
-// Card animation
-function animateValue(el,start,end,duration){
-    let range=end-start,current=start,stepTime=Math.abs(Math.floor(duration/range)),increment=end>start?1:-1;
-    let timer=setInterval(()=>{current+=increment;el.innerText=current;if(current==end)clearInterval(timer);},stepTime);
-}
-
-// Toast notification
 function showToast(message){
     const container=document.getElementById("toast-container");
     const toast=document.createElement("div");
@@ -180,61 +90,45 @@ function showToast(message){
     setTimeout(()=>{toast.remove();},5000);
 }
 
-// Update notification bell
-function updateNotifCount(expiringSoonProducts){
-    document.getElementById("notif-count").innerText=expiringSoonProducts.length;
-    expiringSoonProducts.forEach(p=>showToast(`⚠️ Product "${p.name}" is expiring soon!`));
-}
-
 function renderDashboard(){
-    let table=document.querySelector("table");
+    const table=document.querySelector("table");
     table.innerHTML=`<tr><th>Product</th><th>Quantity</th><th>Expiry Date</th><th>Status</th></tr>`;
-    let today=new Date(),expiringSoon=0,lowStock=0,outStock=0;
-    let chartLabels=[],chartData=[],statusCounts={Good:0,Low:0,Out:0};
-
-    let expiringSoonProducts=[];
-
+    let today=new Date(),expiring=0,low=0,out=0,statusCounts={Good:0,Low:0,Out:0},expiringProducts=[];
     products.forEach(p=>{
-        let expiryDate=new Date(p.expiry);
-        let diffDays=(expiryDate-today)/(1000*60*60*24);
+        const expiryDate=new Date(p.expiry);
+        const diffDays=(expiryDate-today)/(1000*60*60*24);
         let status="Good",className="status-good";
-
-        if(p.quantity==0){status="Out of Stock";className="status-danger";outStock++;statusCounts.Out++;}
-        else if(p.quantity<=5){statusCounts.Low++;lowStock++;}
-        if(diffDays<=7){status="Expiring Soon";className="status-warning";expiringSoon++;statusCounts.Low++; expiringSoonProducts.push(p);}
+        if(p.quantity==0){status="Out of Stock";className="status-danger";out++;statusCounts.Out++;}
+        else if(p.quantity<=5){status="Low Stock";className="status-warning";low++;statusCounts.Low++;}
+        if(diffDays<=7){status="Expiring Soon";className="status-warning";expiring++;statusCounts.Low++; expiringProducts.push(p);}
         if(status==="Good"){statusCounts.Good++;}
-
         table.innerHTML+=`<tr><td>${p.name}</td><td>${p.quantity}</td><td>${p.expiry}</td><td class="${className}">${status}</td></tr>`;
     });
-
-    const cards=document.querySelectorAll(".card p");
-    animateValue(cards[0],0,products.length,800);
-    animateValue(cards[1],0,expiringSoon,800);
-    animateValue(cards[2],0,lowStock,800);
-    animateValue(cards[3],0,outStock,800);
-
-    updateNotifCount(expiringSoonProducts);
-    renderStockChart(chartLabels,chartData);
+    document.getElementById("total-products").innerText=products.length;
+    document.getElementById("expiring-soon").innerText=expiring;
+    document.getElementById("low-stock").innerText=low;
+    document.getElementById("out-stock").innerText=out;
+    renderStockChart(products.map(p=>p.name),products.map(p=>p.quantity));
     renderStatusChart(statusCounts);
 }
 
-// Charts
 function renderStockChart(labels,data){
     const ctx=document.getElementById('stockChart').getContext('2d');
     if(stockChart) stockChart.destroy();
     stockChart=new Chart(ctx,{
         type:'bar',
-        data:{labels:labels,datasets:[{label:'Quantity',data:data,backgroundColor:'rgba(14,165,233,0.7)'}]},
-        options:{responsive:true,animation:{duration:1000,easing:'easeOutQuart'},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+        data:{labels, datasets:[{label:'Quantity',data,backgroundColor:'rgba(14,165,233,0.7)'}]},
+        options:{responsive:true,animation:{duration:1000}}
     });
 }
+
 function renderStatusChart(statusCounts){
     const ctx=document.getElementById('statusChart').getContext('2d');
     if(statusChart) statusChart.destroy();
     statusChart=new Chart(ctx,{
         type:'pie',
-        data:{labels:['Good','Low/Expiring','Out of Stock'],datasets:[{data:[statusCounts.Good,statusCounts.Low,statusCounts.Out],backgroundColor:['#22c55e','#facc15','#ef4444']}]},
-        options:{responsive:true,animation:{duration:1000,easing:'easeOutQuart'},plugins:{legend:{position:'bottom'}}}
+        data:{labels:['Good','Low/Expiring','Out of Stock'], datasets:[{data:[statusCounts.Good,statusCounts.Low,statusCounts.Out],backgroundColor:['#22c55e','#facc15','#ef4444']}]},
+        options:{responsive:true,animation:{duration:1000}}
     });
 }
 
