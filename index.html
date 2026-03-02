@@ -6,49 +6,33 @@
 <title>StockCare Professional Dashboard</title>
 <style>
 /* ===== Reset & Body ===== */
-* {box-sizing: border-box; margin:0; padding:0;}
+* {box-sizing:border-box; margin:0; padding:0;}
 body {font-family:'Segoe UI',sans-serif; background:#eef2f8; color:#1f2937;}
 
-/* ===== Header ===== */
+/* ===== Header / Menu ===== */
 header {
     display:flex; justify-content:space-between; align-items:center;
     padding:20px; background:linear-gradient(90deg,#2563eb,#4f46e5); color:white;
 }
 header h1 {font-size:24px;}
-nav a {color:white; margin-left:20px; text-decoration:none; font-weight:bold;}
-nav a:hover {text-decoration: underline;}
-
-/* ===== Container ===== */
-.container {max-width:1100px; width:95%; margin:30px auto;}
-
-/* ===== Dashboard Illustration ===== */
-.dashboard-img {
-    width:100%; max-width:600px; margin:15px auto; display:block;
-    border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1);
+nav a {
+    color:white; margin-left:20px; text-decoration:none; font-weight:bold; cursor:pointer;
 }
+nav a:hover {text-decoration:underline;}
 
-/* ===== Login Card ===== */
-.login-card {
-    background:white; padding:20px; border-radius:10px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.1); max-width:400px; margin:0 auto 30px auto;
-}
-.login-card h2 {margin-bottom:15px;}
-.login-card input {width:100%; padding:12px; margin:10px 0; border-radius:5px; border:1px solid #ccc;}
-.login-card button {width:100%; padding:12px; background:#2563eb; color:white; border:none; border-radius:5px; cursor:pointer;}
-.login-card button:hover {background:#4f46e5;}
+/* ===== Pages ===== */
+.page {display:none;}
+.page.active {display:block;}
 
-/* ===== Stats Cards ===== */
+/* ===== Dashboard Stats ===== */
 .stats {display:flex; gap:20px; flex-wrap:wrap; margin-bottom:20px;}
 .stat-box {flex:1; min-width:180px; background:linear-gradient(135deg,#2563eb,#4f46e5);
-    color:white; padding:20px; border-radius:10px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    position:relative;}
+    color:white; padding:20px; border-radius:10px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.1); position:relative;}
 .stat-box h3 {font-size:18px;}
 .stat-box .stat-number {font-size:28px;font-weight:bold;margin-top:10px;}
-.stat-box .icon {
-    position:absolute; top:10px; right:10px; font-size:28px; opacity:0.3;
-}
+.stat-box .icon {position:absolute; top:10px; right:10px; font-size:28px; opacity:0.3;}
 
-/* ===== Card Styling ===== */
+/* ===== Card ===== */
 .card {background:white; padding:20px; border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,0.05); margin-bottom:30px;}
 .card h2 {margin-bottom:15px;}
 .card input, .card button {width:100%; padding:12px; margin-top:10px; border-radius:5px; border:1px solid #ccc;}
@@ -73,27 +57,17 @@ td .icon {margin-right:5px;}
 <header>
 <h1>StockCare</h1>
 <nav>
-<a href="#">Dashboard</a>
-<a href="#">Products</a>
-<a href="#">Settings</a>
-<a href="#">Login</a>
+<a onclick="showPage('dashboard')">Dashboard</a>
+<a onclick="showPage('products')">Products</a>
+<a onclick="showPage('settings')">Settings</a>
+<a onclick="showPage('login')">Login</a>
 </nav>
 </header>
 
 <div class="container">
 
-<!-- Dashboard Illustration -->
-<img src="a_digital_illustration_features_a_stockcare_dashbo.png" alt="StockCare Dashboard Illustration" class="dashboard-img">
-
-<!-- Login Card -->
-<div class="login-card">
-<h2>User Login</h2>
-<input type="text" placeholder="Username" id="username">
-<input type="password" placeholder="Password" id="password">
-<button onclick="alert('Login placeholder – implement later')">Login</button>
-</div>
-
-<!-- Statistics -->
+<!-- Dashboard Page -->
+<div id="dashboard" class="page active">
 <div class="stats">
 <div class="stat-box">
 <div class="icon">📦</div>
@@ -111,8 +85,10 @@ td .icon {margin-right:5px;}
 <div class="stat-number" id="expiringCount">0</div>
 </div>
 </div>
+</div>
 
-<!-- Add Product Form -->
+<!-- Products Page -->
+<div id="products" class="page">
 <div class="card">
 <h2>Add Product</h2>
 <input type="text" placeholder="Product Name" id="name">
@@ -123,7 +99,6 @@ td .icon {margin-right:5px;}
 <div id="notification" class="notification"></div>
 </div>
 
-<!-- Product Table -->
 <div class="card">
 <h2>Product List</h2>
 <table>
@@ -139,78 +114,87 @@ td .icon {margin-right:5px;}
 <tbody id="productTable"></tbody>
 </table>
 </div>
+</div>
+
+<!-- Settings Page -->
+<div id="settings" class="page">
+<div class="card">
+<h2>Settings</h2>
+<p>Settings placeholder: add configuration options here.</p>
+</div>
+</div>
+
+<!-- Login Page -->
+<div id="login" class="page">
+<div class="card">
+<h2>User Login</h2>
+<input type="text" placeholder="Username or Email" id="username">
+<input type="password" placeholder="Password" id="password">
+<button onclick="alert('Login placeholder – implement later')">Login</button>
+</div>
+</div>
 
 </div>
 
 <script>
-let products = [];
+let products=[];
 
-function addProduct() {
-    let name = document.getElementById("name").value;
-    let quantity = parseInt(document.getElementById("quantity").value);
-    let minStock = parseInt(document.getElementById("minStock").value);
-    let expiry = document.getElementById("expiry").value;
-    let notification = document.getElementById("notification");
+function showPage(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
 
-    if (!name || !quantity || !minStock || !expiry) {
-        notification.className = "notification error";
-        notification.innerText = "Please fill all fields!";
+function addProduct(){
+    let name=document.getElementById("name").value;
+    let quantity=parseInt(document.getElementById("quantity").value);
+    let minStock=parseInt(document.getElementById("minStock").value);
+    let expiry=document.getElementById("expiry").value;
+    let notification=document.getElementById("notification");
+
+    if(!name||!quantity||!minStock||!expiry){
+        notification.className="notification error";
+        notification.innerText="Please fill all fields!";
         return;
     }
 
-    let product = {name, quantity, minStock, expiry};
+    let product={name,quantity,minStock,expiry};
     products.push(product);
 
-    notification.className = "notification success";
-    notification.innerText = "Product added successfully!";
+    notification.className="notification success";
+    notification.innerText="Product added successfully!";
 
     updateDashboard();
     clearForm();
 }
 
-function updateDashboard() {
-    let table = document.getElementById("productTable");
-    table.innerHTML = "";
-
-    let lowStock = 0;
-    let expiring = 0;
-
-    products.forEach(product => {
-        let status = "Good";
-        let today = new Date();
-        let expiryDate = new Date(product.expiry);
-        let icon = "✅";
-
-        if (product.quantity <= product.minStock) {
-            status = "Low Stock";
-            lowStock++;
-            icon = "⚠️";
-        }
-
-        let diffDays = (expiryDate - today)/(1000*60*60*24);
-        if(diffDays <= 7) {
-            status = "Expiring Soon";
-            expiring++;
-            icon = "⏰";
-        }
-
-        let row = `<tr>
+function updateDashboard(){
+    let table=document.getElementById("productTable");
+    table.innerHTML="";
+    let lowStock=0;
+    let expiring=0;
+    products.forEach(product=>{
+        let status="Good";
+        let icon="✅";
+        let today=new Date();
+        let expiryDate=new Date(product.expiry);
+        if(product.quantity<=product.minStock){status="Low Stock"; lowStock++; icon="⚠️";}
+        let diffDays=(expiryDate-today)/(1000*60*60*24);
+        if(diffDays<=7){status="Expiring Soon"; expiring++; icon="⏰";}
+        let row=`<tr>
         <td>${icon} ${product.name}</td>
         <td>${product.quantity}</td>
         <td>${product.minStock}</td>
         <td>${product.expiry}</td>
-        <td class="${status.toLowerCase().replace(' ', '-')}">${status}</td>
+        <td class="${status.toLowerCase().replace(' ','-')}">${status}</td>
         </tr>`;
-
-        table.innerHTML += row;
+        table.innerHTML+=row;
     });
-
-    document.getElementById("totalProducts").innerText = products.length;
-    document.getElementById("lowStockCount").innerText = lowStock;
-    document.getElementById("expiringCount").innerText = expiring;
+    document.getElementById("totalProducts").innerText=products.length;
+    document.getElementById("lowStockCount").innerText=lowStock;
+    document.getElementById("expiringCount").innerText=expiring;
 }
 
-function clearForm() {
+function clearForm(){
     document.getElementById("name").value="";
     document.getElementById("quantity").value="";
     document.getElementById("minStock").value="";
