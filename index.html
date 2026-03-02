@@ -1,163 +1,175 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>StockCare Professional Dashboard</title>
+    <title>StockCare Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #eef2f7;
-            margin: 0;
-        }
+        /* ====== Reset & Body ====== */
+        * {box-sizing: border-box; margin:0; padding:0;}
+        body {font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #1f2937;}
 
+        /* ====== Header ====== */
         header {
-            background: #1f2937;
+            background: linear-gradient(90deg, #2563eb, #4f46e5);
             color: white;
             padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {font-size: 24px;}
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {text-decoration: underline;}
+
+        /* ====== Container ====== */
+        .container {width: 95%; max-width: 1100px; margin: 30px auto;}
+
+        /* ====== Login Card ====== */
+        .login-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+        }
+        .login-card h2 {margin-bottom: 15px;}
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-card button:hover {background: #4f46e5;}
+
+        /* ====== Stats Cards ====== */
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            flex: 1;
+            min-width: 180px;
+            background: linear-gradient(135deg,#2563eb,#4f46e5);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
+        .stat-box h3 {font-size: 18px;}
+        .stat-box .stat-number {font-size: 28px; font-weight: bold; margin-top: 10px;}
 
-        .container {
-            width: 95%;
-            max-width: 1000px;
-            margin: 30px auto;
-        }
-
+        /* ====== Product Card ====== */
         .card {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
         }
-
-        input, button {
-            padding: 10px;
-            margin-top: 10px;
+        .card h2 {margin-bottom: 15px;}
+        .card input, .card button {
             width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
-
-        button {
-            background: #2563eb;
+        .card button {
+            background: #10b981;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
         }
-
-        button:hover {
-            background: #1e40af;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background: #f3f4f6;
-        }
-
-        .low-stock {
-            color: red;
-            font-weight: bold;
-        }
-
-        .expiring {
-            color: orange;
-            font-weight: bold;
-        }
-
+        .card button:hover {background: #059669;}
         .notification {
-            padding: 10px;
             margin-top: 10px;
+            font-weight: bold;
+            padding: 10px;
             border-radius: 5px;
         }
+        .success {background: #d1fae5; color: #065f46;}
+        .error {background: #fee2e2; color: #991b1b;}
 
-        .success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .stats {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .stat-box {
-            flex: 1;
-            min-width: 150px;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        }
-
-        .stat-number {
-            font-size: 22px;
-            font-weight: bold;
-        }
+        /* ====== Table ====== */
+        table {width: 100%; border-collapse: collapse; margin-top: 15px;}
+        th, td {padding: 12px; border-bottom: 1px solid #ddd; text-align: left;}
+        th {background: #f3f4f6;}
+        .low-stock {color: red; font-weight: bold;}
+        .expiring {color: orange; font-weight: bold;}
+        .good {color: green; font-weight: bold;}
     </style>
 </head>
 <body>
 
 <header>
-    <h1>StockCare Professional Dashboard</h1>
+    <h1>StockCare</h1>
+    <nav>
+        <a href="#">Dashboard</a>
+        <a href="#">Products</a>
+        <a href="#">Settings</a>
+        <a href="#">Login</a>
+    </nav>
 </header>
 
 <div class="container">
 
+    <!-- Login Card -->
+    <div class="login-card">
+        <h2>User Login</h2>
+        <input type="text" placeholder="Username" id="username">
+        <input type="password" placeholder="Password" id="password">
+        <button onclick="alert('Login placeholder – implement later')">Login</button>
+    </div>
+
     <!-- Statistics -->
     <div class="stats">
         <div class="stat-box">
-            <div>Total Products</div>
+            <h3>Total Products</h3>
             <div class="stat-number" id="totalProducts">0</div>
         </div>
-
         <div class="stat-box">
-            <div>Low Stock</div>
+            <h3>Low Stock</h3>
             <div class="stat-number" id="lowStockCount">0</div>
         </div>
-
         <div class="stat-box">
-            <div>Expiring Soon</div>
+            <h3>Expiring Soon</h3>
             <div class="stat-number" id="expiringCount">0</div>
         </div>
     </div>
 
     <!-- Add Product -->
     <div class="card">
-        <h2>Add New Product</h2>
-
-        <input type="text" id="name" placeholder="Product Name">
-        <input type="number" id="quantity" placeholder="Quantity">
-        <input type="number" id="minStock" placeholder="Minimum Stock Alert Number">
+        <h2>Add Product</h2>
+        <input type="text" placeholder="Product Name" id="name">
+        <input type="number" placeholder="Quantity" id="quantity">
+        <input type="number" placeholder="Minimum Stock Alert" id="minStock">
         <input type="date" id="expiry">
-
         <button onclick="addProduct()">Add Product</button>
-
-        <div id="notification"></div>
+        <div id="notification" class="notification"></div>
     </div>
 
     <!-- Product Table -->
     <div class="card">
         <h2>Product List</h2>
-
         <table>
             <thead>
                 <tr>
@@ -190,7 +202,7 @@
             return;
         }
 
-        let product = { name, quantity, minStock, expiry };
+        let product = {name, quantity, minStock, expiry};
         products.push(product);
 
         notification.className = "notification success";
@@ -211,14 +223,12 @@
             let status = "Good";
             let today = new Date();
             let expiryDate = new Date(product.expiry);
-
             if (product.quantity <= product.minStock) {
                 status = "Low Stock";
                 lowStock++;
             }
 
-            let diffDays = (expiryDate - today) / (1000 * 60 * 60 * 24);
-
+            let diffDays = (expiryDate - today) / (1000*60*60*24);
             if (diffDays <= 7) {
                 status = "Expiring Soon";
                 expiring++;
@@ -230,10 +240,9 @@
                     <td>${product.quantity}</td>
                     <td>${product.minStock}</td>
                     <td>${product.expiry}</td>
-                    <td>${status}</td>
+                    <td class="${status.toLowerCase().replace(' ', '-')}">${status}</td>
                 </tr>
             `;
-
             table.innerHTML += row;
         });
 
