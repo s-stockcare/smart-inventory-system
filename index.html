@@ -1,64 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>StockCare Dashboard</title>
+    <title>StockCare Professional Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
+            background: #eef2f7;
             margin: 0;
-            padding: 0;
         }
 
         header {
-            background: #0077cc;
+            background: #1f2937;
             color: white;
             padding: 20px;
             text-align: center;
         }
 
         .container {
-            width: 90%;
-            max-width: 600px;
+            width: 95%;
+            max-width: 1000px;
             margin: 30px auto;
+        }
+
+        .card {
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
         }
 
         input, button {
-            width: 100%;
             padding: 10px;
             margin-top: 10px;
+            width: 100%;
         }
 
         button {
-            background: #0077cc;
+            background: #2563eb;
             color: white;
             border: none;
             cursor: pointer;
-        }
-
-        button:hover {
-            background: #005fa3;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background: #eef3f8;
-            padding: 10px;
-            margin-top: 8px;
             border-radius: 5px;
         }
 
+        button:hover {
+            background: #1e40af;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f3f4f6;
+        }
+
+        .low-stock {
+            color: red;
+            font-weight: bold;
+        }
+
+        .expiring {
+            color: orange;
+            font-weight: bold;
+        }
+
         .notification {
+            padding: 10px;
             margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 150px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 22px;
             font-weight: bold;
         }
     </style>
@@ -66,45 +117,136 @@
 <body>
 
 <header>
-    <h1>StockCare Dashboard</h1>
+    <h1>StockCare Professional Dashboard</h1>
 </header>
 
 <div class="container">
-    <h2>Add New Product</h2>
 
-    <input type="text" id="productName" placeholder="Product Name">
-    <input type="number" id="productQty" placeholder="Quantity">
-    <button onclick="addProduct()">Add Product</button>
+    <!-- Statistics -->
+    <div class="stats">
+        <div class="stat-box">
+            <div>Total Products</div>
+            <div class="stat-number" id="totalProducts">0</div>
+        </div>
 
-    <div id="notification" class="notification"></div>
+        <div class="stat-box">
+            <div>Low Stock</div>
+            <div class="stat-number" id="lowStockCount">0</div>
+        </div>
 
-    <hr>
+        <div class="stat-box">
+            <div>Expiring Soon</div>
+            <div class="stat-number" id="expiringCount">0</div>
+        </div>
+    </div>
 
-    <h2>Product List</h2>
-    <ul id="productList"></ul>
+    <!-- Add Product -->
+    <div class="card">
+        <h2>Add New Product</h2>
+
+        <input type="text" id="name" placeholder="Product Name">
+        <input type="number" id="quantity" placeholder="Quantity">
+        <input type="number" id="minStock" placeholder="Minimum Stock Alert Number">
+        <input type="date" id="expiry">
+
+        <button onclick="addProduct()">Add Product</button>
+
+        <div id="notification"></div>
+    </div>
+
+    <!-- Product Table -->
+    <div class="card">
+        <h2>Product List</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Min Stock</th>
+                    <th>Expiry Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+        </table>
+    </div>
+
 </div>
 
 <script>
+    let products = [];
+
     function addProduct() {
-        let name = document.getElementById("productName").value;
-        let qty = document.getElementById("productQty").value;
+        let name = document.getElementById("name").value;
+        let quantity = parseInt(document.getElementById("quantity").value);
+        let minStock = parseInt(document.getElementById("minStock").value);
+        let expiry = document.getElementById("expiry").value;
         let notification = document.getElementById("notification");
 
-        if(name === "" || qty === "") {
-            notification.style.color = "red";
+        if (!name || !quantity || !minStock || !expiry) {
+            notification.className = "notification error";
             notification.innerText = "Please fill all fields!";
             return;
         }
 
-        let li = document.createElement("li");
-        li.innerText = name + " - Quantity: " + qty;
-        document.getElementById("productList").appendChild(li);
+        let product = { name, quantity, minStock, expiry };
+        products.push(product);
 
-        notification.style.color = "green";
+        notification.className = "notification success";
         notification.innerText = "Product added successfully!";
 
-        document.getElementById("productName").value = "";
-        document.getElementById("productQty").value = "";
+        updateDashboard();
+        clearForm();
+    }
+
+    function updateDashboard() {
+        let table = document.getElementById("productTable");
+        table.innerHTML = "";
+
+        let lowStock = 0;
+        let expiring = 0;
+
+        products.forEach(product => {
+            let status = "Good";
+            let today = new Date();
+            let expiryDate = new Date(product.expiry);
+
+            if (product.quantity <= product.minStock) {
+                status = "Low Stock";
+                lowStock++;
+            }
+
+            let diffDays = (expiryDate - today) / (1000 * 60 * 60 * 24);
+
+            if (diffDays <= 7) {
+                status = "Expiring Soon";
+                expiring++;
+            }
+
+            let row = `
+                <tr>
+                    <td>${product.name}</td>
+                    <td>${product.quantity}</td>
+                    <td>${product.minStock}</td>
+                    <td>${product.expiry}</td>
+                    <td>${status}</td>
+                </tr>
+            `;
+
+            table.innerHTML += row;
+        });
+
+        document.getElementById("totalProducts").innerText = products.length;
+        document.getElementById("lowStockCount").innerText = lowStock;
+        document.getElementById("expiringCount").innerText = expiring;
+    }
+
+    function clearForm() {
+        document.getElementById("name").value = "";
+        document.getElementById("quantity").value = "";
+        document.getElementById("minStock").value = "";
+        document.getElementById("expiry").value = "";
     }
 </script>
 
