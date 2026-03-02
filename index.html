@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockCare Professional Dashboard</title>
+<title>StockCare Dashboard</title>
 <style>
-/* ===== Reset & Body ===== */
 * {box-sizing:border-box; margin:0; padding:0;}
 body {font-family:'Segoe UI',sans-serif; background:#eef2f8; color:#1f2937;}
 
@@ -24,7 +23,7 @@ nav a:hover {text-decoration:underline;}
 .page {display:none;}
 .page.active {display:block;}
 
-/* ===== Dashboard Stats ===== */
+/* ===== Stats Cards ===== */
 .stats {display:flex; gap:20px; flex-wrap:wrap; margin-bottom:20px;}
 .stat-box {flex:1; min-width:180px; background:linear-gradient(135deg,#2563eb,#4f46e5);
     color:white; padding:20px; border-radius:10px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.1); position:relative;}
@@ -32,7 +31,7 @@ nav a:hover {text-decoration:underline;}
 .stat-box .stat-number {font-size:28px;font-weight:bold;margin-top:10px;}
 .stat-box .icon {position:absolute; top:10px; right:10px; font-size:28px; opacity:0.3;}
 
-/* ===== Card ===== */
+/* ===== Card Styling ===== */
 .card {background:white; padding:20px; border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,0.05); margin-bottom:30px;}
 .card h2 {margin-bottom:15px;}
 .card input, .card button {width:100%; padding:12px; margin-top:10px; border-radius:5px; border:1px solid #ccc;}
@@ -50,6 +49,16 @@ th {background:#f3f4f6;}
 .expiring {color:orange; font-weight:bold;}
 .good {color:green; font-weight:bold;}
 td .icon {margin-right:5px;}
+
+/* ===== Pop-up Notification ===== */
+#popup {
+    position:fixed; top:20px; right:20px; background:#fbbf24; color:#1f2937;
+    padding:15px 20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    display:none; z-index:1000; font-weight:bold;
+    animation:fadein 0.5s, fadeout 0.5s 3s;
+}
+@keyframes fadein {from {opacity:0; transform:translateY(-10px);} to {opacity:1; transform:translateY(0);}}
+@keyframes fadeout {from {opacity:1;} to {opacity:0; transform:translateY(-10px);}}
 </style>
 </head>
 <body>
@@ -120,7 +129,7 @@ td .icon {margin-right:5px;}
 <div id="settings" class="page">
 <div class="card">
 <h2>Settings</h2>
-<p>Settings placeholder: add configuration options here.</p>
+<p>Settings placeholder: configure alerts, notifications, user preferences here.</p>
 </div>
 </div>
 
@@ -135,6 +144,9 @@ td .icon {margin-right:5px;}
 </div>
 
 </div>
+
+<!-- Pop-up Notification -->
+<div id="popup"></div>
 
 <script>
 let products=[];
@@ -172,14 +184,15 @@ function updateDashboard(){
     table.innerHTML="";
     let lowStock=0;
     let expiring=0;
+    let today=new Date();
+
     products.forEach(product=>{
         let status="Good";
         let icon="✅";
-        let today=new Date();
         let expiryDate=new Date(product.expiry);
-        if(product.quantity<=product.minStock){status="Low Stock"; lowStock++; icon="⚠️";}
+        if(product.quantity<=product.minStock){status="Low Stock"; lowStock++; icon="⚠️"; showPopup(`${product.name} is low stock!`);}
         let diffDays=(expiryDate-today)/(1000*60*60*24);
-        if(diffDays<=7){status="Expiring Soon"; expiring++; icon="⏰";}
+        if(diffDays<=7){status="Expiring Soon"; expiring++; icon="⏰"; showPopup(`${product.name} is expiring soon!`);}
         let row=`<tr>
         <td>${icon} ${product.name}</td>
         <td>${product.quantity}</td>
@@ -189,6 +202,7 @@ function updateDashboard(){
         </tr>`;
         table.innerHTML+=row;
     });
+
     document.getElementById("totalProducts").innerText=products.length;
     document.getElementById("lowStockCount").innerText=lowStock;
     document.getElementById("expiringCount").innerText=expiring;
@@ -199,6 +213,14 @@ function clearForm(){
     document.getElementById("quantity").value="";
     document.getElementById("minStock").value="";
     document.getElementById("expiry").value="";
+}
+
+// Pop-up notification
+function showPopup(message){
+    let popup=document.getElementById("popup");
+    popup.innerText=message;
+    popup.style.display="block";
+    setTimeout(()=>{popup.style.display="none";},3500);
 }
 </script>
 
