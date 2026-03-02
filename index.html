@@ -1,53 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>StockCare - Add Product</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>StockCare Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #0077cc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            background: #0077cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005fa3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #eef3f8;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+        }
+
+        .notification {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
 <header>
-    <h1>StockCare - Product Manager</h1>
+    <h1>StockCare Dashboard</h1>
 </header>
 
-<main>
-
-    <!-- Notification Message -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div style="color: green; font-weight: bold;">
-                {{ messages[0] }}
-            </div>
-        {% endif %}
-    {% endwith %}
-
+<div class="container">
     <h2>Add New Product</h2>
 
-    <form method="POST">
-        <input type="text" name="name" placeholder="Product Name" required>
-        <br><br>
-        <input type="number" name="quantity" placeholder="Quantity" required>
-        <br><br>
-        <button type="submit">Add Product</button>
-    </form>
+    <input type="text" id="productName" placeholder="Product Name">
+    <input type="number" id="productQty" placeholder="Quantity">
+    <button onclick="addProduct()">Add Product</button>
+
+    <div id="notification" class="notification"></div>
 
     <hr>
 
     <h2>Product List</h2>
+    <ul id="productList"></ul>
+</div>
 
-    {% if products %}
-        <ul>
-            {% for product in products %}
-                <li>
-                    <strong>{{ product.name }}</strong> - Quantity: {{ product.quantity }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No products added yet.</p>
-    {% endif %}
+<script>
+    function addProduct() {
+        let name = document.getElementById("productName").value;
+        let qty = document.getElementById("productQty").value;
+        let notification = document.getElementById("notification");
 
-</main>
+        if(name === "" || qty === "") {
+            notification.style.color = "red";
+            notification.innerText = "Please fill all fields!";
+            return;
+        }
+
+        let li = document.createElement("li");
+        li.innerText = name + " - Quantity: " + qty;
+        document.getElementById("productList").appendChild(li);
+
+        notification.style.color = "green";
+        notification.innerText = "Product added successfully!";
+
+        document.getElementById("productName").value = "";
+        document.getElementById("productQty").value = "";
+    }
+</script>
 
 </body>
 </html>
